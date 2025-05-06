@@ -26,7 +26,7 @@ public class DbService : IDbService
         command.Connection = connection;
         await connection.OpenAsync();
         
-        DbTransaction transaction = connection.BeginTransaction();
+        DbTransaction transaction = connection.BeginTransaction(); //transakcja zawsze przydatna do modyfikacji 2 tabel na raz
         command.Transaction = transaction as SqlTransaction;
 
         try
