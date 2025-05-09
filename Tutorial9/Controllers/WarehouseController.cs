@@ -35,14 +35,45 @@ public class WarehouseController : Controller
         {
             return NotFound("Warehouse not found");
         }
+        
+        int orderID = await _dbService.GetIDOrderByProductId(request.IdProduct, request.Amount, request.CreatedAt);
+       
+        bool orderIsFulfilled = await _dbService.IsOrderFulfilled(orderID);
+        if (orderIsFulfilled)
+        {
+            return BadRequest("Order is already fulfilled");
+        }
 
-        // var result = await _dbService.AddProductToWarehouse
+        await _dbService.UpdateOrderFulfilled(orderID);
+        
+        
+        int productWarehouseId = await _dbService.AddProductToWarehouse(request, orderID, product.Price);
+
         return Ok(new
         {
             message = $"Added {product.Name} to warehouse {warehouse.Name}",
-          //  IdProductWarehouse = result
-        
+            IdProductWarehouse = productWarehouseId
         });
+    }
+    
+    
+    [HttpPost("add/product/ProcedurePost")]
+    public async Task<IActionResult> AddProductToWarehouseUsingProcedure([FromBody] Product_Warehouse_POST request)
+    {
+        try
+        {
+            var newId = await _dbService.ProcedureAsync(
+                request.IdProduct, 
+                request.IdWarehouse, 
+                request.Amount, 
+                request.CreatedAt);
+
+            return Ok(new { NewId = newId });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { Message = ex.Message });
+        }
     }
     
     

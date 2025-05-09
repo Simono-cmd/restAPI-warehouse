@@ -3,4 +3,27 @@
 GET {{Tutorial9_HostAddress}}/weatherforecast/
 Accept: application/json
 
+### Dodanie produktu do magazynu
+POST http://localhost:5027/api/add/product/2/warehouse/1
+Content-Type: application/json
+
+{
+  "IdProduct": 2,
+  "IdWarehouse": 1,
+  "Amount": 1,
+  "CreatedAt": "2025-10-20T10:00:00"
+}
+
 ###
+
+POST http://localhost:5027/api/add/product/ProcedurePost
+Content-Type: application/json
+
+{
+"IdProduct": 1,
+"IdWarehouse": 1,
+"Amount": 1,
+"CreatedAt": "2025-10-20T10:00:00"
+}
+
+### metody już przetestowane i zadziałały
